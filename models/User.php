@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 // class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
@@ -11,7 +12,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     // public $username;
     // public $password;
     public $authKey;
-    public $accessToken;
+    public $access_token;
 
     // private static $users = [
     //     '100' => [
@@ -108,6 +109,32 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return password_verify($password, $this->password);
+        // return password_verify($password, $this->password);
+        return Yii::$app->security->validatePassword($password, $this->password);
     }
+
+    // public function setPassword($password)
+    // {
+    //     $this->password = Yii::$app->security->generatePasswordHash($password);
+    // }
+
+
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    public function generateAccessToken()
+    {
+        $this->access_token = Yii::$app->security->generateRandomString();
+    }
+
+    public function rules()
+    {
+        return [
+            // ... other rules ...
+            [['access_token'], 'safe'], // Ensure access_token is a safe attribute for saving
+        ];
+    }
+
 }

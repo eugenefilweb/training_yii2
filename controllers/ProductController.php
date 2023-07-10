@@ -42,7 +42,8 @@ class ProductController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
         // print_r($dataProvider);
 
-        $model = Product::find()->all();
+        $model = Product::find()->all(); // more than 1 output
+
         // print_r($model);
         // die;
         return $this->render('index', [
@@ -61,10 +62,24 @@ class ProductController extends Controller
      */
     public function actionView($id)
     {
+        $_SESSION['asd'];
+        Yii::$app->session->get('asd');
+        
+        $_SESSION['asd'] = 'asd';
+        Yii::$app->session->set('asd');
+
+        $_POST['asd'];
+        Yii::$app->request->post('asd');
+
+        $_GET['asd'];
+        Yii::$app->request->get('asd');
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
+
+
 
     /**
      * Creates a new Product model.
@@ -137,4 +152,6 @@ class ProductController extends Controller
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
+
+
 }

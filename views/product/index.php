@@ -5,92 +5,76 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\widgets\ActiveForm;
 
-/** @var yii\web\View $this */
-/** @var app\models\search\Product $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
+// /** @var yii\web\View $this */
+// /** @var app\models\search\Product $searchModel */
+// /** @var yii\data\ActiveDataProvider $dataProvider */
+
+// /** @var yii\bootstrap5\ActiveForm $form */
+// /** @var app\models\CartForm $model */
 
 $this->title = Yii::t('app', 'Products');
 $this->params['breadcrumbs'][] = $this->title;
+// $csrfToken = Yii::$app->request->csrfToken;
 ?>
 <div class="product-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <!-- <p>
-        <?= Html::a(Yii::t('app', 'Create Product'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <!-- <p> -->
+        <?php //echo Html::a(Yii::t('app', 'Create Product'), ['create'], ['class' => 'btn btn-success']) ?>
+    <!-- </p> -->
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php //echo GridView::widget([
+        // 'dataProvider' => $dataProvider,
+        // 'filterModel' => $searchModel,
+        // 'columns' => [
+        //     ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'product_name',
-            'price',
-            'date_created',
-            'date_updated',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Product $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
-    ]); ?> -->
-
-<!-- 
-    <div class="container">
-        <div class="row">
-            <?php  foreach($model as $index => $product): ?>
-                <div class="col-md-4" >
-                    <h4><?= $product['product_name'] ?></h4>
-                    <div><?= $product['price'] ?></div>
-                    <div><?= $product['date_created'] ?></div>
-                </div>
-                <?php endforeach ?>
-            </div>
-    </div> -->
-
-    <!-- <div class="container">
-    <div class="row">
-        <?php foreach($model as $index => $product): ?>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title"><?= $product['product_name'] ?></h4>
-                        <div class="card-text"><?= $product['price'] ?></div>
-                        <div class="card-text"><?= $product['date_created'] ?></div>
-                    </div>
-                </div>
-            </div>
-        <?php endforeach ?>
-    </div>
-</div> -->
+        //     'id',
+        //     'product_name',
+        //     'price',
+        //     'date_created',
+        //     'date_updated',
+        //     [
+        //         'class' => ActionColumn::className(),
+        //         'urlCreator' => function ($action, Product $model, $key, $index, $column) {
+        //             return Url::toRoute([$action, 'id' => $model->id]);
+        //          }
+        //     ],
+        // ],
+    // ]); ?>
 
 <div class="container">
     <div class="row">
         <?php foreach($model as $index => $product): ?>
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-body d-flex flex-column align-items-center justify-content-center border border-1 border-black">
-                        <h4 class="card-title"><?= $product['product_name'] ?></h4>
-                        <hr class="border border-black w-100">
-                        <div class="card-text text-center mt-3 d-flex justify-content-between w-50">
-                            <div>Price: </div>
-                            <div><?= $product['price'] ?></div>
-                            <form method="post"  action="<?= Url::toRoute(['cart/index']) ?>">
-                                <input type="hidden" id="fname" name="product_id" value="<?php echo $product['id']; ?>"><br>
-                                <label for="fname">QTY:</label><br>
-                                <input type="number" id="lname" name="qty" value=""><br><br>
-                                <input type="submit" value="Add to Cart">
-                            </form>
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h4><?= $product['product_name'] ?></h4>
                         </div>
-                        <div class="card-text text-center">Date Created: <?= $product['date_created'] ?></div>
+                    </div>
+                    <div class="card-body">
+                        <?php $form = ActiveForm::begin([
+                            // 'id' => 'product-form',
+                            'action' => ['cart/index'],
+                            'options' => [
+                                'class' => ''
+                            ] 
+                        ]); ?>
+                            <?= $form->field($product, 'id')->textInput(['type' => 'hidden'])->label(false) ?>
+                            <div class="input-group mb-3">
+                                <?= $form->field($product, 'qty', ['options' => ['template' => false]])->textInput(['type' => 'number', 'min' => 1, 'value' => 1])->label(false) ?>
+                                <?= Html::submitButton('Add to Cart', ['class' => 'btn btn-sm btn-primary']) ?>
+                            </div>
+                        <?php ActiveForm::end() ?>
+                    </div>
+                    <div class="card-footer">
+                        Date Created: <?= $product['date_created'] ?>
                     </div>
                 </div>
             </div>

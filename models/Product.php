@@ -15,6 +15,8 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
+    public $qty;
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +36,7 @@ class Product extends \yii\db\ActiveRecord
             // [['date_created', 'date_updated'], 'safe'],
             // [['date_updated'], 'safe'],
             [['product_name'], 'string', 'max' => 64],
+            [['qty'], 'safe']
         ];
     }
 
